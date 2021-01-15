@@ -1,5 +1,6 @@
 package com.space.test_basic_activity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +53,42 @@ public class MainActivity extends AppCompatActivity {
         TempEmail = email.getText().toString();
     }
 
+    public void InsertData(final String name, final String email) {
+        class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
 
+            @Override
+            protected String doInBackground(String... params) {
+                String NameHolder = name;
+                String EmailHolder = email;
+
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+
+                nameValuePairs.add(new BasicNameValuePair("name", NameHolder));
+                nameValuePairs.add(new BasicNameValuePair("email", EmailHolder));
+
+                try {
+                    HttpClient httpClient = new DefaultHttpClient();
+                    HttpPost httpPost = new HttpPost(ServerURL);
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+                    HttpEntity httpEntity = httpResponse.getEntity();
+                } catch (ClientProtocolException e) {
+
+                } catch (IOException e) {
+
+                }
+                return "Data inserted successfully";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                super.onPostExecute(result);
+                Toast.makeText(MainActivity.this, "Data submit successfully ", Toast.LENGTH_SHORT).show();
+            }
+        }
+        SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
+        sendPostReqAsyncTask.execute(name,email);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
