@@ -12,8 +12,15 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
+
+    String ServerURL = "dec1i1bel.space/public_html/android_php_demo/db/get_data.php" ;
+    EditText name, email;
+    Button btn;
+    String TempName, TempEmail ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +37,19 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        name = (EditText) findViewById(R.id.userName);
+        email = (EditText) findViewById(R.id.userEmail);
+        btn = (Button) findViewById(R.id.btn_submit);
+
     }
+
+    public void GetData() {
+        TempName = name.getText().toString();
+        TempEmail = email.getText().toString();
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
